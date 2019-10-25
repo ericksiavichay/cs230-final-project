@@ -1,0 +1,36 @@
+work_dir: ./work_dir/recognition/hcp_1200/ST_GCN
+
+# feeder
+feeder: feeder.feeder.Feeder
+train_feeder_args:
+  random_choose: True
+  random_move: True
+  window_size: 150
+  data_path: ../train_data.npy
+  label_path: ../train_label.pkl
+test_feeder_args:
+  data_path: ../test_data.npy
+  label_path: ../test_label.pkl
+
+# model
+model: net.st_gcn.Model
+model_args:
+  in_channels: 1
+  num_class: 2
+  edge_importance_weighting: True
+  graph_args:
+    layout: 'openpose'
+    strategy: 'spatial'
+
+# training
+device: [0]
+batch_size: 5
+test_batch_size: 5
+
+#optim
+base_lr: 0.1
+step: [20, 30, 40, 50]
+num_epoch: 50
+
+
+
