@@ -2,9 +2,12 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import seaborn as sns
 import numpy as np
+from pdb import set_trace
 
 """
 Credits to github.com/drazens for this amazing script.
+
+Modified so it can work for the project.
 """
 
 def heatmap(x, y, **kwargs):
@@ -53,17 +56,16 @@ def heatmap(x, y, **kwargs):
             val_position = (val - size_min) * 0.99 / (size_max - size_min) + 0.01 # position of value in the input range, relative to the length of the input range
             val_position = min(max(val_position, 0), 1) # bound the position betwen 0 and 1
             return val_position * size_scale
-    if 'x_order' in kwargs:
-        x_names = [t for t in kwargs['x_order']]
-    else:
-        x_names = [t for t in sorted(set([v for v in x]))]
-    x_to_num = {p[1]:p[0] for p in enumerate(x_names)}
 
-    if 'y_order' in kwargs:
-        y_names = [t for t in kwargs['y_order']]
-    else:
-        y_names = [t for t in sorted(set([v for v in y]))]
-    y_to_num = {p[1]:p[0] for p in enumerate(y_names)}
+
+    #######
+    fig, ax = plt.subplots()
+
+    # Mapping from column names to integer coordinates
+    x_labels = [v for v in sorted(x.unique())]
+    y_labels = [v for v in sorted(y.unique())]
+    x_to_num = {p[1]:p[0] for p in enumerate(x_labels)}
+    y_to_num = {p[1]:p[0] for p in enumerate(y_labels)}
 
     plot_grid = plt.GridSpec(1, 15, hspace=0.2, wspace=0.1) # Setup a 1x10 grid
     ax = plt.subplot(plot_grid[:,:-1]) # Use the left 14/15ths of the grid for the main plot
@@ -74,24 +76,27 @@ def heatmap(x, y, **kwargs):
          'color', 'palette', 'color_range', 'size', 'size_range', 'size_scale', 'marker', 'x_order', 'y_order'
     ]}
 
+    size_scale = 500
     ax.scatter(
-        x=[x_to_num[v] for v in x],
-        y=[y_to_num[v] for v in y],
-        marker=marker,
+        x=x.map(x_to_num), # Use mapping for x
+        y=y.map(y_to_num), # Use mapping for
+        marker='s', # Use square as scatterplot marker
         s=[value_to_size(v) for v in size],
         c=[value_to_color(v) for v in color],
         **kwargs_pass_on
     )
-    ax.set_xticks([v for k,v in x_to_num.items()])
-    ax.set_xticklabels([k for k in x_to_num], rotation=45, horizontalalignment='right')
-    ax.set_yticks([v for k,v in y_to_num.items()])
-    ax.set_yticklabels([k for k in y_to_num])
 
+    # Show column labels on the axes
+    ax.set_xticks([x_to_num[v] for v in x_labels])
+    ax.set_xticklabels(x_labels, rotation=45, horizontalalignment='right')
+    ax.set_yticks([y_to_num[v] for v in y_labels])
+    ax.set_yticklabels(y_labels)
+
+    # Move grid lines
     ax.grid(False, 'major')
     ax.grid(True, 'minor')
     ax.set_xticks([t + 0.5 for t in ax.get_xticks()], minor=True)
     ax.set_yticks([t + 0.5 for t in ax.get_yticks()], minor=True)
-
     ax.set_xlim([-0.5, max([v for v in x_to_num.values()]) + 0.5])
     ax.set_ylim([-0.5, max([v for v in y_to_num.values()]) + 0.5])
     ax.set_facecolor('#F1F1F1')
@@ -121,10 +126,12 @@ def heatmap(x, y, **kwargs):
 
 
 def corrplot(data, size_scale=500, marker='s'):
-    corr = pd.melt(data.reset_index(), id_vars='index')
+    corr = data.corr()
+    corr = pd.melt(corr.reset_index(), id_vars='index')
     corr.columns = ['x', 'y', 'value']
     heatmap(
-        corr['x'], corr['y'],
+        x = corr['x'],
+        y = corr['y'],
         color=corr['value'], color_range=[-1, 1],
         palette=sns.diverging_palette(20, 220, n=256),
         size=corr['value'].abs(), size_range=[0,1],
