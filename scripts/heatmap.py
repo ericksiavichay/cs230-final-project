@@ -7,6 +7,12 @@ from pdb import set_trace
 """
 Credits to github.com/drazens for this amazing script.
 
+Implementation:
+https://towardsdatascience.com/better-heatmaps-and-correlation-matrix-plots-in-python-41445d0f2bec
+
+Repo:
+https://github.com/drazenz/heatmap/blob/master/heatmap.py
+
 Modified so it can work for the project.
 """
 
