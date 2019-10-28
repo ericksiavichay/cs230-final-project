@@ -18,6 +18,9 @@ from torchlight import import_class
 
 from .io import IO
 
+# # DEBUG:
+import pdb
+
 class Processor(IO):
     """
         Base Processor
@@ -65,6 +68,7 @@ class Processor(IO):
                 num_workers=self.arg.num_worker * torchlight.ngpu(
                     self.arg.device))
 
+
     def show_epoch_info(self):
         for k, v in self.epoch_info.items():
             self.io.print_log('\t{}: {}'.format(k, v))
@@ -87,6 +91,7 @@ class Processor(IO):
 
     def train(self):
         for _ in range(100):
+            # pdb.set_trace()
             self.iter_info['loss'] = 0
             self.show_iter_info()
             self.meta_info['iter'] += 1

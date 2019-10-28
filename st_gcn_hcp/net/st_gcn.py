@@ -7,6 +7,8 @@ from net.utils.tgcn import ConvTemporalGraphical
 from net.utils.graph import Graph
 import numpy as np
 
+import pdb
+
 class Model(nn.Module):
     r"""Spatial temporal graph convolutional networks.
 
@@ -34,7 +36,7 @@ class Model(nn.Module):
         # load graph
         self.graph = Graph(**graph_args)
         A = np.load('../adj/adj_hat.npy')
-        A = A[0]
+        # A = A[0]
         Dl = np.sum(A, 0)
         num_node = A.shape[0]
         Dn = np.zeros((num_node, num_node))
@@ -99,6 +101,7 @@ class Model(nn.Module):
         x = x.view(N, M, -1, 1, 1).mean(dim=1)
 
         # prediction
+        pdb.set_trace()
         x = self.fcn(x)
         x = x.view(x.size(0), -1)
 
@@ -125,7 +128,7 @@ class Model(nn.Module):
         # prediction
         x = self.fcn(x)
         output = x.view(N, M, -1, t, v).permute(0, 2, 3, 4, 1)
-
+        pdb.set_trace()
         return output, feature
 
 class st_gcn(nn.Module):
