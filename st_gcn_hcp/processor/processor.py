@@ -3,7 +3,7 @@
 import sys
 import argparse
 import yaml
-import numpy as np
+import numpy as np, pickle as pk
 
 # torch
 import torch
@@ -141,10 +141,16 @@ class Processor(IO):
 
             # save the output of model
             if self.arg.save_result:
-                result_dict = dict(
-                    zip(self.data_loader['test'].dataset.sample_name,
-                        self.result))
+                # result_dict = dict(
+                #     zip(self.data_loader['test'].dataset.sample_name,
+                #         self.result))
+                result_dict = {}
+                for sn, r in zip(self.data_loader['test'].dataset.sample, self.result):
+                    result_dict[sn] = np.argmax(r)
                 self.io.save_pkl(result_dict, 'test_result.pkl')
+                print(result_dict)
+                pickle_out = open("test_result.pkl","wb")
+                pk.dump(result_dict, pickle_out)
 
     @staticmethod
     def get_parser(add_help=False):
