@@ -1,4 +1,4 @@
-weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch20_model.pt
+weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch1_model.pt
 
 # feeder
 feeder: feeder.feeder.Feeder
