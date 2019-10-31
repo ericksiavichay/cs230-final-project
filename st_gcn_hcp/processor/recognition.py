@@ -41,7 +41,7 @@ class REC_Processor(Processor):
         self.model = self.io.load_model(self.arg.model,
                                         **(self.arg.model_args))
         self.model.apply(weights_init)
-        self.loss = nn.CrossEntropyLoss()
+        self.loss = nn.CrossEntropyLoss() #nn.BCELoss() #nn.BCEWithLogitsLoss() #nn.CrossEntropyLoss()
         
     def load_optimizer(self):
         if self.arg.optimizer == 'SGD':
@@ -102,12 +102,11 @@ class REC_Processor(Processor):
             self.show_iter_info()
             self.meta_info['iter'] += 1
 
-        self.epoch_info['mean_loss']= np.mean(loss_value)
+        self.epoch_info['mean_loss'] = np.mean(loss_value)
         self.show_epoch_info()
         self.io.print_timer()
 
     def test(self, evaluation=True):
-
         self.model.eval()
         loader = self.data_loader['test']
         loss_value = []

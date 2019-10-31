@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import missingno as msno
-import scripts.heatmap as heatmap
+import heatmap as heatmap
 sns.set
 
 def plot_scatter(data=None, x_name="", y_name="", x=None, y=None, title="Scatter Plot",

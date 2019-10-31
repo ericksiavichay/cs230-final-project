@@ -101,7 +101,7 @@ class Model(nn.Module):
         x = x.view(N, M, -1, 1, 1).mean(dim=1)
 
         # prediction
-        pdb.set_trace()
+        # pdb.set_trace()
         x = self.fcn(x)
         x = x.view(x.size(0), -1)
 
@@ -128,7 +128,7 @@ class Model(nn.Module):
         # prediction
         x = self.fcn(x)
         output = x.view(N, M, -1, t, v).permute(0, 2, 3, 4, 1)
-        pdb.set_trace()
+        # pdb.set_trace()
         return output, feature
 
 class st_gcn(nn.Module):
