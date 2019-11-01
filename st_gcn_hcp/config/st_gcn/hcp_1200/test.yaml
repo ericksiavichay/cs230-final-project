@@ -3,8 +3,8 @@ weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch1_100_age_model.pt
 # feeder
 feeder: feeder.feeder.Feeder
 test_feeder_args:
-  data_path: ../test_data_age_100.npy
-  label_path: ../test_label_100.pkl
+  data_path: ../aws_test_data_age.npy
+  label_path: ../aws_test_label.pkl
 
 # model
 model: net.st_gcn.Model
@@ -19,4 +19,4 @@ model_args:
 # test
 phase: test
 device: 0
-test_batch_size: 20
+test_batch_size: 64

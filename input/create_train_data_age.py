@@ -7,15 +7,17 @@ from sklearn.model_selection import train_test_split
 
 MIN_AGE = 22
 TIMELENGTH = 1200
+TIMESLICE = 100
 BRAIN_REGION = 360
 
 
 print('create X and Y dataset')
-X, Y = [], []
+X, Y, sample_names = [], [], []
+label_dict_train, label_dict_test = {}, {}
+
 df = pd.read_csv('data/HCP_1200.csv')
 
 for file in glob.glob('data/*left.npy'):
-    if (index > 5): break
     filename = file.split("_")
     left = np.load(file)
 
@@ -23,26 +25,36 @@ for file in glob.glob('data/*left.npy'):
 
     if row.empty:
         print("{} is not in HCP_1200.csv".format(filename[0][-6:]))
-    else:
-        Y.append(int(row.values[0][2])-MIN_AGE)
-
+    elif left.shape[1] > TIMESLICE:
         right = np.load('_'.join(filename[:-1]) + '_right.npy')
         d = np.concatenate((left, right), axis=0)
-        X.append([np.array([d]).T])
+
+        for i in range(int(left.shape[1]/TIMESLICE)):
+            start = i*TIMESLICE
+            end = (i+1)*TIMESLICE
+            if len(d[:,start:end][0]) == TIMESLICE:
+                sample_names.append(row.values[0][2])
+                Y.append(int(row.values[0][2])-MIN_AGE)
+                X.append([np.array([d[:,start:end]]).T])
 
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
-label_dict_train['sample_name'] = Y_train
-label_dict_test['sample_name'] = Y_test
+X = np.array(X)
+X = np.reshape(X, (len(X), 1, TIMESLICE, BRAIN_REGION, 1))
+
+X_train, X_test, Y_train, Y_test, test_samples, train_samples = train_test_split(X, Y, sample_names, test_size=0.2, random_state=0)
+label_dict_train['label'] = Y_train
+label_dict_train['sample_name'] = train_samples
+label_dict_test['label'] = Y_test
+label_dict_test['sample_name'] = test_samples
+
+print(X_train.shape)
 
 print('save dataset')
-np.save('train_data_age.npy', X_train)
-np.save('test_data_age.npy'. X_test)
-#np.save('sample_name.npy', label_dict['sample_name'])
-#np.save('label.npy', label_dict['label'])
-pickle_out = open("train_label_age.pkl","wb")
+np.save('aws_train_data_age.npy', X_train)
+np.save('aws_test_data_age.npy', X_test)
+pickle_out = open("aws_train_label_age.pkl","wb")
 pk.dump(label_dict_train, pickle_out)
 pickle_out.close()
-pickle_out = open("test_label_age.pkl","wb")
+pickle_out = open("aws_test_label_age.pkl","wb")
 pk.dump(label_dict_test, pickle_out)
 pickle_out.close()

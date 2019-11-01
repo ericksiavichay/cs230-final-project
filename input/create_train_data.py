@@ -37,36 +37,29 @@ for file in glob.glob('data/*left.npy'):
         print("{} is not in HCP_1200.csv".format(filename[0][-6:]))
     if training_data:
         if left.shape[1] == 1200 and not row.empty:
-            label_dict_train['sample_name'].append(row.values[0][0])
-            label_dict_train['label'].append(row.values[0][2])
-            # if row.values[0][1] == 'M':
-            #     label_dict_train['label'].append(0)
-            # else:
-            #     label_dict_train['label'].append(1)
+            if row.values[0][1] == 'M':
+                label_dict_train['label'].append(0)
+            else:
+                label_dict_train['label'].append(1)
             right = np.load('_'.join(filename[:-1]) + '_right.npy')
             d = np.concatenate((left, right), axis=0)
-            print(test_data[index2][0].shape)
             train_data[index][0] = np.array([d]).T
             index += 1
     if testing_data:
         if left.shape[1] == 1200 and not row.empty:
-            label_dict_test['sample_name'].append(row.values[0][0])
-            label_dict_test['label'].append(row.values[0][2])
-            # if row.values[0][1] == 'M':
-            #     label_dict_test['label'].append(0)
-            # else:
-            #     label_dict_test['label'].append(1)
+            if row.values[0][1] == 'M':
+                label_dict_test['label'].append(0)
+            else:
+                label_dict_test['label'].append(1)
             right = np.load('_'.join(filename[:-1]) + '_right.npy')
             d = np.concatenate((left, right), axis=0)
             test_data[index2][0] = np.array([d]).T
-            print(test_data[index2][0].shape)
             index2 += 1
 
 
 assert(index == num_train_samples)
 assert(index2 == num_test_samples)
 
-print(test_data)
 
 np.save(('train_data_age_%d.npy', num_train_samples), train_data)
 np.save(('test_data_age_%d.npy', num_test_samples), test_data)
