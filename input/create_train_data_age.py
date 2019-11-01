@@ -1,80 +1,48 @@
-import numpy as np
-import glob
-import pandas as pd
-import pickle as pk
+import numpy as np, glob
+import pandas as pd, pickle as pk
+from sklearn.model_selection import train_test_split
 
 #converting the npy files to shape (N, C, T, V, M)
 #creating pickle file for labels
 
-index = 0
-label_dict_train = {}
-label_dict_test = {}
-label_dict_train['sample_name'] = []
-label_dict_train['label'] = []
-label_dict_test['sample_name'] = []
-label_dict_test['label'] = []
-#number of samples to run
-num_train_samples = 100
-num_test_samples = 100
-train_data = np.zeros((num_train_samples, 1, 1200, 360, 1))
-test_data = np.zeros((num_test_samples, 1, 1200, 360, 1))
+MIN_AGE = 22
+TIMELENGTH = 1200
+BRAIN_REGION = 360
+
+
+print('create X and Y dataset')
+X, Y = [], []
 df = pd.read_csv('data/HCP_1200.csv')
-training_data = True
-testing_data = False
-index2 = 0
+
 for file in glob.glob('data/*left.npy'):
-    if index == num_train_samples:
-        training_data = False
-        testing_data = True
-    if index2 == num_test_samples:
-        break
+    if (index > 5): break
     filename = file.split("_")
     left = np.load(file)
+
     row = df[df['subject'] == int(filename[0][-6:])]
-    if left.shape[1] != 1200:
-        print("{} does not have 1200 timesteps".format(filename[0][-6:]))
+
     if row.empty:
         print("{} is not in HCP_1200.csv".format(filename[0][-6:]))
-    if training_data:
-        if left.shape[1] == 1200 and not row.empty:
-            label_dict_train['sample_name'].append(row.values[0][0])
-            label_dict_train['label'].append(int(row.values[0][2])-22)
-            # if row.values[0][1] == 'M':
-            #     label_dict_train['label'].append(0)
-            # else:
-            #     label_dict_train['label'].append(1)
-            right = np.load('_'.join(filename[:-1]) + '_right.npy')
-            d = np.concatenate((left, right), axis=0)
-            train_data[index][0] = np.array([d]).T
-            index += 1
-    if testing_data:
-        if left.shape[1] == 1200 and not row.empty:
-            label_dict_test['sample_name'].append(row.values[0][0])
-            label_dict_test['label'].append(int(row.values[0][2])-22)
-            # if row.values[0][1] == 'M':
-            #     label_dict_test['label'].append(0)
-            # else:
-            #     label_dict_test['label'].append(1)
-            right = np.load('_'.join(filename[:-1]) + '_right.npy')
-            d = np.concatenate((left, right), axis=0)
-            test_data[index2][0] = np.array([d]).T
-            index2 += 1
+    else:
+        Y.append(int(row.values[0][2])-MIN_AGE)
+
+        right = np.load('_'.join(filename[:-1]) + '_right.npy')
+        d = np.concatenate((left, right), axis=0)
+        X.append([np.array([d]).T])
 
 
-assert(index == num_train_samples)
-assert(index2 == num_test_samples)
-print(min(label_dict_train['label']))
-print(max(label_dict_train['label']))
-print(min(label_dict_test['label']))
-print(max(label_dict_test['label']))
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+label_dict_train['sample_name'] = Y_train
+label_dict_test['sample_name'] = Y_test
 
-# np.save('train_data_age_{}.npy'.format(num_train_samples), train_data)
-# np.save('test_data_age_{}.npy'.format(num_test_samples), test_data)
-# #np.save('sample_name.npy', label_dict['sample_name'])
-# #np.save('label.npy', label_dict['label'])
-# pickle_out = open("train_label_{}.pkl".format(num_train_samples),"wb")
-# pk.dump(label_dict_train, pickle_out)
-# pickle_out.close()
-# pickle_out = open("test_label_{}.pkl".format(num_train_samples),"wb")
-# pk.dump(label_dict_test, pickle_out)
-# pickle_out.close()
+print('save dataset')
+np.save('train_data_age.npy', X_train)
+np.save('test_data_age.npy'. X_test)
+#np.save('sample_name.npy', label_dict['sample_name'])
+#np.save('label.npy', label_dict['label'])
+pickle_out = open("train_label_age.pkl","wb")
+pk.dump(label_dict_train, pickle_out)
+pickle_out.close()
+pickle_out = open("test_label_age.pkl","wb")
+pk.dump(label_dict_test, pickle_out)
+pickle_out.close()

@@ -69,6 +69,7 @@ class REC_Processor(Processor):
         else:
             self.lr = self.arg.base_lr
 
+    # validity of accuracy
     def show_topk(self, k):
         rank = self.result.argsort()
         hit_top_k = [l in rank[i, -k:] for i, l in enumerate(self.label)]

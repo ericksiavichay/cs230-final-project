@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # pylint: disable=W0201
 import sys
-import argparse, csv
+import argparse, csv, random
 import yaml
 import numpy as np, pickle as pk
 
@@ -119,7 +119,7 @@ class Processor(IO):
                     self.io.print_log('Done.')
                     writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])])
 
-                    save model
+                    # save model
                     if ((epoch + 1) % self.arg.save_interval == 0) or (
                             epoch + 1 == self.arg.num_epoch):
                         filename = 'epoch{}_model.pt'.format(epoch + 1)
@@ -143,9 +143,10 @@ class Processor(IO):
 
             # evaluation
             self.io.print_log('Evaluation Start:')
-            print(self.data_loader['test'].dataset.keys())
             self.test()
             self.io.print_log('Done.\n')
+
+            print(self.data_loader['test'].dataset.label)
 
             # save the output of model
             if self.arg.save_result:
@@ -153,12 +154,11 @@ class Processor(IO):
                 #     zip(self.data_loader['test'].dataset.sample_name,
                 #         self.result))
                 result_dict = {}
-                for sn, r in zip(self.data_loader['test'].dataset.sample, self.result):
-                    result_dict[sn] = np.argmax(r)
+                for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result, self.data_loader['test'].dataset.label):
+                    result_dict[sn] = (np.argmax(predicted), actual)
                 self.io.save_pkl(result_dict, 'test_result.pkl')
-                print(result_dict)
-                pickle_out = open("test_result.pkl","wb")
-                pk.dump(result_dict, pickle_out)
+                np.save('test_result.npy', result_dict)
+
 
     @staticmethod
     def get_parser(add_help=False):
