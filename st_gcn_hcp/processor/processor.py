@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # pylint: disable=W0201
 import sys
-import argparse
+import argparse, csv
 import yaml
 import numpy as np, pickle as pk
 
@@ -18,8 +18,6 @@ from torchlight import import_class
 
 from .io import IO
 
-# # DEBUG:
-import pdb
 
 class Processor(IO):
     """
@@ -91,7 +89,6 @@ class Processor(IO):
 
     def train(self):
         for _ in range(100):
-            # pdb.set_trace()
             self.iter_info['loss'] = 0
             self.show_iter_info()
             self.meta_info['iter'] += 1
@@ -110,26 +107,31 @@ class Processor(IO):
 
         # training phase
         if self.arg.phase == 'train':
-            for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
-                self.meta_info['epoch'] = epoch
+            with open('../training_loss.csv', 'w') as wfile:
+                writer = csv.writer(wfile)
 
-                # training
-                self.io.print_log('Training epoch: {}'.format(epoch))
-                self.train()
-                self.io.print_log('Done.')
+                for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
+                    self.meta_info['epoch'] = epoch
 
-                # save model
-                if ((epoch + 1) % self.arg.save_interval == 0) or (
-                        epoch + 1 == self.arg.num_epoch):
-                    filename = 'epoch{}_model.pt'.format(epoch + 1)
-                    self.io.save_model(self.model, filename)
-
-                # evaluation
-                if ((epoch + 1) % self.arg.eval_interval == 0) or (
-                        epoch + 1 == self.arg.num_epoch):
-                    self.io.print_log('Eval epoch: {}'.format(epoch))
-                    self.test()
+                    # training
+                    self.io.print_log('Training epoch: {}'.format(epoch))
+                    self.train()
                     self.io.print_log('Done.')
+                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])])
+
+                    save model
+                    if ((epoch + 1) % self.arg.save_interval == 0) or (
+                            epoch + 1 == self.arg.num_epoch):
+                        filename = 'epoch{}_model.pt'.format(epoch + 1)
+                        self.io.save_model(self.model, filename)
+
+                    # evaluation
+                    if ((epoch + 1) % self.arg.eval_interval == 0) or (
+                            epoch + 1 == self.arg.num_epoch):
+                        self.io.print_log('Eval epoch: {}'.format(epoch))
+                        self.test()
+                        self.io.print_log('Done.')
+
         # test phase
         elif self.arg.phase == 'test':
 
@@ -142,21 +144,21 @@ class Processor(IO):
             # evaluation
             self.io.print_log('Evaluation Start:')
             print(self.data_loader['test'].dataset.keys())
-            # self.test()
-            # self.io.print_log('Done.\n')
-            #
-            # # save the output of model
-            # if self.arg.save_result:
-            #     # result_dict = dict(
-            #     #     zip(self.data_loader['test'].dataset.sample_name,
-            #     #         self.result))
-            #     result_dict = {}
-            #     for sn, r in zip(self.data_loader['test'].dataset.sample, self.result):
-            #         result_dict[sn] = np.argmax(r)
-            #     self.io.save_pkl(result_dict, 'test_result.pkl')
-            #     print(result_dict)
-            #     pickle_out = open("test_result.pkl","wb")
-            #     pk.dump(result_dict, pickle_out)
+            self.test()
+            self.io.print_log('Done.\n')
+
+            # save the output of model
+            if self.arg.save_result:
+                # result_dict = dict(
+                #     zip(self.data_loader['test'].dataset.sample_name,
+                #         self.result))
+                result_dict = {}
+                for sn, r in zip(self.data_loader['test'].dataset.sample, self.result):
+                    result_dict[sn] = np.argmax(r)
+                self.io.save_pkl(result_dict, 'test_result.pkl')
+                print(result_dict)
+                pickle_out = open("test_result.pkl","wb")
+                pk.dump(result_dict, pickle_out)
 
     @staticmethod
     def get_parser(add_help=False):
