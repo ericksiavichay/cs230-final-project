@@ -47,7 +47,7 @@ label_dict_train['sample_name'] = train_samples
 label_dict_test['label'] = Y_test
 label_dict_test['sample_name'] = test_samples
 
-print(X_train.shape)
+# print(X_train.shape)
 
 print('save dataset')
 np.save('aws_train_data_age.npy', X_train)

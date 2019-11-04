@@ -55,8 +55,7 @@ class Feeder(torch.utils.data.Dataset):
             temp = pickle.load(f)
             self.sample = temp['sample_name']
             self.label = temp['label']
-        #self.sample = list(np.load('../sample_name.npy'))
-        #self.label = list(np.load('../label.npy'))
+
         # load data
         if mmap:
             self.data = np.load(self.data_path, mmap_mode='r')

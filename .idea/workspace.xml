@@ -3,11 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="cb540992-17c9-4ace-a937-643f50675fa8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/create_train_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/input/create_train_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/create_train_data_age.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input/create_train_data_age.py" beforeDir="false" afterPath="$PROJECT_DIR$/input/create_train_data_age.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/train.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/train.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/st_gcn_hcp/processor/recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/st_gcn_hcp/processor/recognition.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/st_gcn_hcp/feeder/feeder.py" beforeDir="false" afterPath="$PROJECT_DIR$/st_gcn_hcp/feeder/feeder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/st_gcn_hcp/processor/processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/st_gcn_hcp/processor/processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training_loss.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/training_loss_accuracy.csv" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,14 +19,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/proj$main.coverage" NAME="main Coverage Results" MODIFIED="1572624734945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/st_gcn_hcp" />
+    <SUITE FILE_PATH="coverage/proj$main.coverage" NAME="main Coverage Results" MODIFIED="1572631342867" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/st_gcn_hcp" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/st_gcn_hcp/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
+            <state relative-caret-position="315">
               <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
               <folding>
                 <element signature="e#22#37#0" expanded="true" />
@@ -35,8 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/st_gcn_hcp/processor/processor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="105" column="10" selection-start-line="105" selection-start-column="10" selection-end-line="105" selection-end-column="10" />
+            <state relative-caret-position="1965">
+              <caret line="131" column="35" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
               <folding>
                 <element signature="e#46#56#0" expanded="true" />
               </folding>
@@ -44,18 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/st_gcn_hcp/feeder/feeder.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-762" />
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/st_gcn_hcp/net/st_gcn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="50" column="36" selection-start-line="50" selection-start-column="36" selection-end-line="50" selection-end-column="36" />
+            <state relative-caret-position="195">
+              <caret line="54" column="32" lean-forward="true" selection-start-line="54" selection-start-column="32" selection-end-line="54" selection-end-column="32" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -66,8 +62,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/st_gcn_hcp/processor/recognition.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="568">
-              <caret line="141" column="33" selection-start-line="140" selection-start-column="12" selection-end-line="141" selection-end-column="33" />
+            <state relative-caret-position="426">
+              <caret line="153" column="40" selection-start-line="153" selection-start-column="40" selection-end-line="153" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -75,8 +71,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/train.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="34" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="105">
+              <caret line="7" column="21" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -84,8 +80,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+            <state relative-caret-position="330">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
         </entry>
@@ -105,10 +101,12 @@
       <list>
         <option value="$PROJECT_DIR$/st_gcn_hcp/net/st_gcn.py" />
         <option value="$PROJECT_DIR$/input/create_train_data_age.py" />
-        <option value="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml" />
         <option value="$PROJECT_DIR$/st_gcn_hcp/processor/recognition.py" />
-        <option value="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/train.yaml" />
+        <option value="$PROJECT_DIR$/st_gcn_hcp/processor/io.py" />
+        <option value="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml" />
+        <option value="$PROJECT_DIR$/st_gcn_hcp/feeder/feeder.py" />
         <option value="$PROJECT_DIR$/st_gcn_hcp/processor/processor.py" />
+        <option value="$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/train.yaml" />
       </list>
     </option>
   </component>
@@ -118,10 +116,10 @@
     <annotation-enable>false</annotation-enable>
     <other-services-enabled>true</other-services-enabled>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="104" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="229" />
     <option name="y" value="23" />
-    <option name="width" value="1326" />
+    <option name="width" value="1201" />
     <option name="height" value="803" />
   </component>
   <component name="ProjectView">
@@ -285,22 +283,29 @@
       <workItem from="1572547339807" duration="3440000" />
       <workItem from="1572553285898" duration="9251000" />
       <workItem from="1572583098812" duration="1323000" />
-      <workItem from="1572585475958" duration="4627000" />
+      <workItem from="1572585475958" duration="5834000" />
+      <workItem from="1572631031079" duration="221000" />
+      <workItem from="1572631309153" duration="2086000" />
+      <workItem from="1572635397174" duration="2719000" />
+      <workItem from="1572680250583" duration="154000" />
+      <workItem from="1572680801588" duration="700000" />
+      <workItem from="1572902481385" duration="682000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23966000" />
+    <option name="totallyTimeSpent" value="31735000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="104" y="23" width="1326" height="803" extended-state="0" />
+    <frame x="229" y="23" width="1201" height="803" extended-state="1" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25263953" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2789342" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32994187" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34132582" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.34132582" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -308,9 +313,9 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007542" side_tool="true" weight="0.32863188" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.32994187" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49924585" weight="0.32863188" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -323,16 +328,23 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/input/create_train_data_age.py" />
-    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml">
+    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/feeder/feeder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        <state relative-caret-position="207">
+          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/processor/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="61" column="13" selection-start-line="61" selection-start-column="13" selection-end-line="61" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/st_gcn_hcp/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
+        <state relative-caret-position="315">
           <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
           <folding>
             <element signature="e#22#37#0" expanded="true" />
@@ -340,39 +352,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/processor/recognition.py">
+    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/test.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="568">
-          <caret line="141" column="33" selection-start-line="140" selection-start-column="12" selection-end-line="141" selection-end-column="33" />
+        <state relative-caret-position="330">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/st_gcn_hcp/config/st_gcn/hcp_1200/train.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        <state relative-caret-position="105">
+          <caret line="7" column="21" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/st_gcn_hcp/processor/processor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="105" column="10" selection-start-line="105" selection-start-column="10" selection-end-line="105" selection-end-column="10" />
+        <state relative-caret-position="1965">
+          <caret line="131" column="35" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
           <folding>
             <element signature="e#46#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/feeder/feeder.py">
+    <entry file="file://$PROJECT_DIR$/st_gcn_hcp/processor/recognition.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-762" />
+        <state relative-caret-position="426">
+          <caret line="153" column="40" selection-start-line="153" selection-start-column="40" selection-end-line="153" selection-end-column="40" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/st_gcn_hcp/net/st_gcn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="50" column="36" selection-start-line="50" selection-start-column="36" selection-end-line="50" selection-end-column="36" />
+        <state relative-caret-position="195">
+          <caret line="54" column="32" lean-forward="true" selection-start-line="54" selection-start-column="32" selection-end-line="54" selection-end-column="32" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>

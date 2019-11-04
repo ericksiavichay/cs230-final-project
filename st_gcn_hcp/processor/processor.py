@@ -150,12 +150,9 @@ class Processor(IO):
 
             # save the output of model
             if self.arg.save_result:
-                # result_dict = dict(
-                #     zip(self.data_loader['test'].dataset.sample_name,
-                #         self.result))
                 result_dict = {}
                 for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result, self.data_loader['test'].dataset.label):
-                    result_dict[sn] = (np.argmax(predicted), actual)
+                    result_dict[sn] = (np.argmax(predicted), int(actual)-22) # to normalize n
                 self.io.save_pkl(result_dict, 'test_result.pkl')
                 np.save('test_result.npy', result_dict)
 
