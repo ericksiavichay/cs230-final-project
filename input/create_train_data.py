@@ -14,7 +14,7 @@ label_dict_train['label'] = []
 label_dict_test['sample_name'] = []
 label_dict_test['label'] = []
 #number of samples to run
-num_train_samples = 5
+num_train_samples = 50
 num_test_samples = 5
 train_data = np.zeros((num_train_samples, 1, 1200, 360, 1))
 test_data = np.zeros((num_test_samples, 1, 1200, 360, 1))
@@ -22,7 +22,7 @@ df = pd.read_csv('data/HCP_1200.csv')
 training_data = True
 testing_data = False
 index2 = 0
-for file in glob.glob('data/*left.npy'):
+for file in glob.glob('data/hcp_tc_npy/*left.npy'):
     if index == num_train_samples:
         training_data = False
         testing_data = True
@@ -30,13 +30,14 @@ for file in glob.glob('data/*left.npy'):
         break
     filename = file.split("_")
     left = np.load(file)
-    row = df[df['subject'] == int(filename[0][-6:])]
+    row = df[df['subject'] == int(filename[2][-6:])]
     if left.shape[1] != 1200:
-        print("{} does not have 1200 timesteps".format(filename[0][-6:]))
+        print("{} does not have 1200 timesteps".format(filename[2][-6:]))
     if row.empty:
-        print("{} is not in HCP_1200.csv".format(filename[0][-6:]))
+        print("{} is not in HCP_1200.csv".format(filename[2][-6:]))
     if training_data:
         if left.shape[1] == 1200 and not row.empty:
+            label_dict_train['sample_name'].append(row.values[0][0])
             if row.values[0][1] == 'M':
                 label_dict_train['label'].append(0)
             else:
@@ -47,6 +48,7 @@ for file in glob.glob('data/*left.npy'):
             index += 1
     if testing_data:
         if left.shape[1] == 1200 and not row.empty:
+            label_dict_test['sample_name'].append(row.values[0][0])
             if row.values[0][1] == 'M':
                 label_dict_test['label'].append(0)
             else:
@@ -56,18 +58,16 @@ for file in glob.glob('data/*left.npy'):
             test_data[index2][0] = np.array([d]).T
             index2 += 1
 
-
 assert(index == num_train_samples)
 assert(index2 == num_test_samples)
 
-
-np.save(('train_data_age_%d.npy', num_train_samples), train_data)
-np.save(('test_data_age_%d.npy', num_test_samples), test_data)
+np.save('train_data.npy', train_data)
+np.save('test_data.npy', test_data)
 #np.save('sample_name.npy', label_dict['sample_name'])
 #np.save('label.npy', label_dict['label'])
-pickle_out = open(("train_label_%d.pkl", num_train_samples),"wb")
+pickle_out = open("train_label.pkl","wb")
 pk.dump(label_dict_train, pickle_out)
 pickle_out.close()
-pickle_out = open(("test_label_%d.pkl", num_train_samples),"wb")
+pickle_out = open("test_label.pkl","wb")
 pk.dump(label_dict_test, pickle_out)
 pickle_out.close()
