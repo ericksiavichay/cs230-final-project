@@ -130,7 +130,6 @@ def heatmap(x, y, **kwargs):
         ax.set_yticks(np.linspace(min(bar_y), max(bar_y), 3)) # Show vertical ticks for min, middle and max
         ax.yaxis.tick_right() # Show vertical ticks on the right
 
-
 def corrplot(data, size_scale=500, marker='s'):
     corr = data.corr()
     corr = pd.melt(corr.reset_index(), id_vars='index')
