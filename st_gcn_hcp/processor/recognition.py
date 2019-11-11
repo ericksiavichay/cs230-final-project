@@ -18,6 +18,8 @@ from torchlight import import_class
 
 from .processor import Processor
 
+from pdb import set_trace
+
 def weights_init(m):
     classname = m.__class__.__name__
     if classname.find('Conv1d') != -1:
@@ -42,7 +44,7 @@ class REC_Processor(Processor):
                                         **(self.arg.model_args))
         self.model.apply(weights_init)
         self.loss = nn.CrossEntropyLoss() #nn.MSELoss() #nn.CrossEntropyLoss() #nn.BCELoss() #nn.BCEWithLogitsLoss() #nn.CrossEntropyLoss()
-        
+
     def load_optimizer(self):
         if self.arg.optimizer == 'SGD':
             self.optimizer = optim.SGD(
@@ -71,10 +73,12 @@ class REC_Processor(Processor):
 
     # validity of accuracy
     def show_topk(self, k):
+        # set_trace()
         rank = self.result.argsort()
         hit_top_k = [l in rank[i, -k:] for i, l in enumerate(self.label)]
         accuracy = sum(hit_top_k) * 1.0 / len(hit_top_k)
         self.io.print_log('\tTop{}: {:.2f}%'.format(k, 100 * accuracy))
+        return accuracy
 
     def train(self):
         self.model.train()
@@ -115,7 +119,7 @@ class REC_Processor(Processor):
         label_frag = []
 
         for data, label in loader:
-            
+
             # get data
             data = data.float().to(self.dev)
             label = label.long().to(self.dev)
@@ -131,15 +135,19 @@ class REC_Processor(Processor):
                 loss_value.append(loss.item())
                 label_frag.append(label.data.cpu().numpy())
 
+        # set_trace()
+        accuracies = []
         self.result = np.concatenate(result_frag)
         if evaluation:
             self.label = np.concatenate(label_frag)
             self.epoch_info['mean_loss']= np.mean(loss_value)
-            self.show_epoch_info()
+            self.show_epoch_info
 
-            # show top-k accuracy
+            # show top-k accuracy and collect accuracies
             for k in self.arg.show_topk:
-                self.show_topk(k)
+                accuracies.append(self.show_topk(k))
+
+        return accuracies
 
     @staticmethod
     def get_parser(add_help=False):

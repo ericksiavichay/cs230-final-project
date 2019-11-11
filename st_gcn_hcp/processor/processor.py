@@ -18,6 +18,8 @@ from torchlight import import_class
 
 from .io import IO
 
+from pdb import set_trace
+
 
 class Processor(IO):
     """
@@ -88,15 +90,15 @@ class Processor(IO):
                 self.io.log('train', self.meta_info['iter'], self.iter_info)
 
     def train(self):
-        for _ in range(100):
+        for _ in range(0):
             self.iter_info['loss'] = 0
             self.show_iter_info()
             self.meta_info['iter'] += 1
-        self.epoch_info['mean loss'] = 0
+        self.epoch_info['mean loss'] = 1
         self.show_epoch_info()
 
     def test(self):
-        for _ in range(100):
+        for _ in range(0):
             self.iter_info['loss'] = 1
             self.show_iter_info()
         self.epoch_info['mean loss'] = 1
@@ -107,8 +109,15 @@ class Processor(IO):
 
         # training phase
         if self.arg.phase == 'train':
-            with open('../training_loss.csv', 'w') as wfile:
+            with open('../training_loss.csv', 'w') as wfile, open('../training_accuracy.csv', 'w') as acc_file:
                 writer = csv.writer(wfile)
+                acc_writer = csv.writer(acc_file)
+
+                # create CSV headers for saved outputs
+                accuracy_header = ["epoch"] + ["k=" + str(k_value) for k_value in self.arg.show_topk]
+
+                # write header to file
+                acc_writer.writerow(accuracy_header)
 
                 for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
                     self.meta_info['epoch'] = epoch
@@ -128,8 +137,12 @@ class Processor(IO):
                     # evaluation
                     if ((epoch + 1) % self.arg.eval_interval == 0) or (
                             epoch + 1 == self.arg.num_epoch):
+
+                        # begin saving the training accuracy for each
                         self.io.print_log('Eval epoch: {}'.format(epoch))
-                        self.test()
+                        training_acc_by_k = self.test() # list of accuracies for each k for this epoch
+                        accuracies = [epoch] + training_acc_by_k
+                        writer.writerow(accuracies)
                         self.io.print_log('Done.')
 
         # test phase
