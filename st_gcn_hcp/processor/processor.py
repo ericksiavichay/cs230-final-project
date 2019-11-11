@@ -126,7 +126,7 @@ class Processor(IO):
                     self.io.print_log('Training epoch: {}'.format(epoch))
                     self.train()
                     self.io.print_log('Done.')
-                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])])
+
 
                     # save model
                     if ((epoch + 1) % self.arg.save_interval == 0) or (
@@ -135,15 +135,16 @@ class Processor(IO):
                         self.io.save_model(self.model, filename)
 
                     # evaluation
-                    if ((epoch + 1) % self.arg.eval_interval == 0) or (
-                            epoch + 1 == self.arg.num_epoch):
+                    # if ((epoch + 1) % self.arg.eval_interval == 0) or (
+                    #         epoch + 1 == self.arg.num_epoch):
 
-                        # begin saving the training accuracy for each
-                        self.io.print_log('Eval epoch: {}'.format(epoch))
-                        training_acc_by_k = self.test() # list of accuracies for each k for this epoch
-                        accuracies = [epoch] + training_acc_by_k
-                        writer.writerow(accuracies)
-                        self.io.print_log('Done.')
+                    # begin saving the training accuracy for each
+                    self.io.print_log('Eval epoch: {}'.format(epoch))
+                    training_acc_by_k = self.test() # list of accuracies for each k for this epoch
+                    # accuracies = [epoch] + training_acc_by_k
+                    # writer.writerow(accuracies)
+                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc_by_k)
+                    self.io.print_log('Done.')
 
         # test phase
         elif self.arg.phase == 'test':
