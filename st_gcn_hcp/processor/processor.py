@@ -107,8 +107,15 @@ class Processor(IO):
 
         # training phase
         if self.arg.phase == 'train':
-            with open('../training_loss.csv', 'w') as wfile:
+            with open('../training_loss.csv', 'w') as wfile, open('../training_accuracy.csv', 'w') as acc_file:
                 writer = csv.writer(wfile)
+                acc_writer = csv.writer(acc_file)
+
+                # create CSV headers for saved outputs
+                accuracy_header = ["epoch"] + ["k=" + str(k_value) for k_value in self.arg.show_topk]
+
+                # write header to file
+                acc_writer.writerow(accuracy_header)
 
                 for epoch in range(self.arg.start_epoch, self.arg.num_epoch):
                     self.meta_info['epoch'] = epoch
@@ -117,7 +124,6 @@ class Processor(IO):
                     self.io.print_log('Training epoch: {}'.format(epoch))
                     self.train()
                     self.io.print_log('Done.')
-                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])])
 
                     # save model
                     if ((epoch + 1) % self.arg.save_interval == 0) or (
@@ -125,37 +131,39 @@ class Processor(IO):
                         filename = 'epoch{}_model.pt'.format(epoch + 1)
                         self.io.save_model(self.model, filename)
 
-                    # evaluation
-                    if ((epoch + 1) % self.arg.eval_interval == 0) or (
-                            epoch + 1 == self.arg.num_epoch):
-                        self.io.print_log('Eval epoch: {}'.format(epoch))
-                        self.test()
-                        self.io.print_log('Done.')
+                    # begin saving the training accuracy for each
+                    self.io.print_log('Eval epoch: {}'.format(epoch))
+                    training_acc_by_k = self.test()  # list of accuracies for each k for this epoch
+                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc_by_k)
+                    self.io.print_log('Done.')
 
         # test phase
         elif self.arg.phase == 'test':
+            with open('../testing_accuracy.csv', 'w') as acc_file:
+                acc_writer = csv.writer(acc_file)
 
-            # the path of weights must be appointed
-            if self.arg.weights is None:
-                raise ValueError('Please appoint --weights.')
-            self.io.print_log('Model:   {}.'.format(self.arg.model))
-            self.io.print_log('Weights: {}.'.format(self.arg.weights))
+                # the path of weights must be appointed
+                if self.arg.weights is None:
+                    raise ValueError('Please appoint --weights.')
+                self.io.print_log('Model:   {}.'.format(self.arg.model))
+                self.io.print_log('Weights: {}.'.format(self.arg.weights))
 
-            # evaluation
-            self.io.print_log('Evaluation Start:')
-            self.test()
-            self.io.print_log('Done.\n')
+                # evaluation
+                self.io.print_log('Evaluation Start:')
+                training_acc_by_k = self.test()
+                acc_writer.writerow(training_acc_by_k)
+                self.io.print_log('Done.\n')
 
-            print(self.data_loader['test'].dataset.label)
+                print(self.data_loader['test'].dataset.label)
 
-            # save the output of model
-            if self.arg.save_result:
-                result_dict = {}
-                for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result, self.data_loader['test'].dataset.label):
-                    result_dict[sn] = (np.argmax(predicted), int(actual)-22) # to normalize n
-                self.io.save_pkl(result_dict, 'test_result.pkl')
-                np.save('test_result.npy', result_dict)
-
+                # save the output of model
+                if self.arg.save_result:
+                    result_dict = {}
+                    for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
+                                                     self.data_loader['test'].dataset.label):
+                        result_dict[sn] = (np.argmax(predicted), int(actual) - 22)  # to normalize n
+                    self.io.save_pkl(result_dict, 'test_result.pkl')
+                    np.save('test_result.npy', result_dict)
 
     @staticmethod
     def get_parser(add_help=False):
