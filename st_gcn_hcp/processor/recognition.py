@@ -76,6 +76,8 @@ class REC_Processor(Processor):
         accuracy = sum(hit_top_k) * 1.0 / len(hit_top_k)
         self.io.print_log('\tTop{}: {:.2f}%'.format(k, 100 * accuracy))
 
+        return accuracy
+
     def train(self):
         self.model.train()
         self.adjust_lr()
@@ -132,6 +134,8 @@ class REC_Processor(Processor):
                 label_frag.append(label.data.cpu().numpy())
 
         self.result = np.concatenate(result_frag)
+
+        accuracies = []
         if evaluation:
             self.label = np.concatenate(label_frag)
             self.epoch_info['mean_loss']= np.mean(loss_value)
@@ -139,7 +143,7 @@ class REC_Processor(Processor):
 
             # show top-k accuracy
             for k in self.arg.show_topk:
-                self.show_topk(k)
+                accuracies.append(self.show_topk(k))
 
     @staticmethod
     def get_parser(add_help=False):
