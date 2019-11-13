@@ -35,7 +35,7 @@ class Model(nn.Module):
 
         # load graph
         self.graph = Graph(**graph_args)
-        A = np.load('../adj/adj_h_hat.npy')
+        A = np.load('../adj/dummy_adj.npy')
         # A = A[0]
         Dl = np.sum(A, 0)
         num_node = A.shape[0]
