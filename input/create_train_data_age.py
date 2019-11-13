@@ -8,7 +8,8 @@ from sklearn.model_selection import train_test_split
 MIN_AGE = 22
 TIMELENGTH = 1200
 TIMESLICE = 100
-BRAIN_REGION = 360
+BRAIN_REGION = 180
+age = [22, 35]
 
 
 print('create X and Y dataset')
@@ -25,16 +26,17 @@ for file in glob.glob('data/*left.npy'):
 
     if row.empty:
         print("{} is not in HCP_1200.csv".format(filename[0][-6:]))
-    elif left.shape[1] > TIMESLICE:
-        right = np.load('_'.join(filename[:-1]) + '_right.npy')
-        d = np.concatenate((left, right), axis=0)
 
-        for i in range(int(left.shape[1]/TIMESLICE)):
+    elif left.shape[1] > TIMESLICE and int(row.values[0][2]) in age:
+        right = np.load('_'.join(filename[:-1]) + '_right.npy')
+        d = left + right / 2
+
+        for i in range(int(d.shape[1]/TIMESLICE)):
             start = i*TIMESLICE
             end = (i+1)*TIMESLICE
             if len(d[:,start:end][0]) == TIMESLICE:
                 sample_names.append(row.values[0][2])
-                Y.append(int(row.values[0][2])-MIN_AGE)
+                Y.append(int(int(row.values[0][2])==MIN_AGE))
                 X.append([np.array([d[:,start:end]]).T])
 
 
@@ -50,11 +52,11 @@ label_dict_test['sample_name'] = test_samples
 # print(X_train.shape)
 
 print('save dataset')
-np.save('aws_train_data_age.npy', X_train)
-np.save('aws_test_data_age.npy', X_test)
-pickle_out = open("aws_train_label_age.pkl","wb")
+np.save('h_bin_train_data.npy', X_train)
+np.save('h_bin_test_data.npy', X_test)
+pickle_out = open("h_bin_train_label.pkl","wb")
 pk.dump(label_dict_train, pickle_out)
 pickle_out.close()
-pickle_out = open("aws_test_label_age.pkl","wb")
+pickle_out = open("h_bin_test_label.pkl","wb")
 pk.dump(label_dict_test, pickle_out)
 pickle_out.close()

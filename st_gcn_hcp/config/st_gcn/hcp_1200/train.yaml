@@ -7,12 +7,12 @@ feeder: feeder.feeder.Feeder
 train_feeder_args:
   random_choose: True
   random_move: True
-  window_size: 150
-  data_path: ../bin_train_data_age.npy
-  label_path: ../bin_train_label_age.pkl
+  #window_size: 150
+  data_path: ../train_data_age.npy
+  label_path: ../train_label_age.pkl
 test_feeder_args:
-  data_path: ../bin_train_data_age.npy
-  label_path: ../bin_train_label_age.pkl
+  data_path: ../train_data_age.npy
+  label_path: ../train_label_age.pkl
 
 # model
 model: net.st_gcn.Model

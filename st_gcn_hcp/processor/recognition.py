@@ -138,12 +138,14 @@ class REC_Processor(Processor):
         accuracies = []
         if evaluation:
             self.label = np.concatenate(label_frag)
-            self.epoch_info['mean_loss']= np.mean(loss_value)
+            self.epoch_info['mean_loss'] = np.mean(loss_value)
             self.show_epoch_info()
 
             # show top-k accuracy
             for k in self.arg.show_topk:
                 accuracies.append(self.show_topk(k))
+
+        return accuracies
 
     @staticmethod
     def get_parser(add_help=False):
