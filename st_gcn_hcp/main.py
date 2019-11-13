@@ -27,6 +27,7 @@ if __name__ == '__main__':
     arg = parser.parse_args()
 
     # start
+    print(arg.processor)
     Processor = processors[arg.processor]
     p = Processor(sys.argv[2:])
 
