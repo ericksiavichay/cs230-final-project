@@ -14,13 +14,13 @@ for t in range(SIZE):
 
 	for i in range(100):
 		g1_m = [[np.random.rand()] for i in range(5)]
-		g1_m[0][0] += AMP*math.sin(i)
-		g1_m[1][0] += AMP*math.sin(i)
+		g1_m[0][0] += t + AMP*math.sin(i)
+		g1_m[1][0] += t + AMP*math.sin(i)
 		
 		g2_m = [[np.random.rand()] for i in range(5)]
-		g2_m[2][0] += AMP*math.sin(i)
-		g2_m[3][0] += AMP*math.sin(i)
-		g2_m[4][0] += AMP*math.sin(i)
+		g2_m[2][0] += t + AMP*math.sin(i)
+		g2_m[3][0] += t + AMP*math.sin(i)
+		g2_m[4][0] += t + AMP*math.sin(i)
 
 		g1.append(g1_m)
 		g2.append(g2_m)

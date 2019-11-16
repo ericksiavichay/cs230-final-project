@@ -3,8 +3,8 @@ weights: ./work_dir/recognition/hcp_1200/ST_GCN/st_gcn.kinetics.pt
 # feeder
 feeder: feeder.feeder.Feeder
 test_feeder_args:
-  data_path: ../test_data.npy
-  label_path: ../test_label.pkl
+  data_path: ../aws/ba_test_data.npy
+  label_path: ../aws/ba_test_label.pkl
 
 # model
 model: net.st_gcn.Model

@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 MIN_AGE = 22
 TIMELENGTH = 1200
 TIMESLICE = 100
-BRAIN_REGION = 180
+BRAIN_REGION = 22
 age = [22, 35]
 
 
@@ -18,23 +18,16 @@ label_dict_train, label_dict_test = {}, {}
 
 df = pd.read_csv('data/HCP_1200.csv')
 
-index = 0
-for file in glob.glob('data/*left.npy'):
+for file in glob.glob('data/*.npy'):
     filename = file.split("_")
-    left = np.load(file)
-    index +=1
-
-    if (index>5): break
+    d = np.load(file)
 
     row = df[df['subject'] == int(filename[0][-6:])]
 
     if row.empty:
         print("{} is not in HCP_1200.csv".format(filename[0][-6:]))
 
-    elif left.shape[1] > TIMESLICE and int(row.values[0][2]) in age:
-        right = np.load('_'.join(filename[:-1]) + '_right.npy')
-        d = left + right / 2
-
+    elif d.shape[1] > TIMESLICE and int(row.values[0][2]) in age:
         for i in range(int(d.shape[1]/TIMESLICE)):
             start = i*TIMESLICE
             end = (i+1)*TIMESLICE
@@ -47,20 +40,19 @@ for file in glob.glob('data/*left.npy'):
 
 X = np.array(X)
 
-# X_train, X_test, Y_train, Y_test, test_samples, train_samples = train_test_split(X, Y, sample_names, test_size=0.2, random_state=0)
-# label_dict_train['label'] = Y_train
-# label_dict_train['sample_name'] = train_samples
-# label_dict_test['label'] = Y_test
-# label_dict_test['sample_name'] = test_samples
+X_train, X_test, Y_train, Y_test, test_samples, train_samples = train_test_split(X, Y, sample_names, test_size=0.2, random_state=0)
+label_dict_train['label'] = Y_train
+label_dict_train['sample_name'] = train_samples
+label_dict_test['label'] = Y_test
+label_dict_test['sample_name'] = test_samples
 
-# print(X_train.shape)
 
-# print('save dataset')
-# np.save('h_bin_train_data.npy', X_train)
-# np.save('h_bin_test_data.npy', X_test)
-# pickle_out = open("h_bin_train_label.pkl","wb")
-# pk.dump(label_dict_train, pickle_out)
-# pickle_out.close()
-# pickle_out = open("h_bin_test_label.pkl","wb")
-# pk.dump(label_dict_test, pickle_out)
-# pickle_out.close()
+print('save dataset')
+np.save('ba_train_data.npy', X_train)
+np.save('ba_test_data.npy', X_test)
+pickle_out = open("ba_train_label.pkl","wb")
+pk.dump(label_dict_train, pickle_out)
+pickle_out.close()
+pickle_out = open("ba_test_label.pkl","wb")
+pk.dump(label_dict_test, pickle_out)
+pickle_out.close()
