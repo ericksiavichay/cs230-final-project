@@ -139,31 +139,25 @@ class Processor(IO):
 
         # test phase
         elif self.arg.phase == 'test':
-            with open('../testing_accuracy.csv', 'w') as acc_file:
-                acc_writer = csv.writer(acc_file)
+            # the path of weights must be appointed
+            if self.arg.weights is None:
+                raise ValueError('Please appoint --weights.')
+            self.io.print_log('Model:   {}.'.format(self.arg.model))
+            self.io.print_log('Weights: {}.'.format(self.arg.weights))
 
-                # the path of weights must be appointed
-                if self.arg.weights is None:
-                    raise ValueError('Please appoint --weights.')
-                self.io.print_log('Model:   {}.'.format(self.arg.model))
-                self.io.print_log('Weights: {}.'.format(self.arg.weights))
+            # evaluation
+            self.io.print_log('Evaluation Start:')
+            self.test()
+            self.io.print_log('Done.\n')
 
-                # evaluation
-                self.io.print_log('Evaluation Start:')
-                training_acc_by_k = self.test()
-                acc_writer.writerow(training_acc_by_k)
-                self.io.print_log('Done.\n')
-
-                print(self.data_loader['test'].dataset.label)
-
-                # save the output of model
-                if self.arg.save_result:
-                    result_dict = {}
-                    for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
-                                                     self.data_loader['test'].dataset.label):
-                        result_dict[sn] = (np.argmax(predicted), int(actual) - 22)  # to normalize n
-                    self.io.save_pkl(result_dict, 'test_result.pkl')
-                    np.save('test_result.npy', result_dict)
+            # save the output of model
+            if self.arg.save_result:
+                result_dict = {}
+                for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
+                                                 self.data_loader['test'].dataset.label):
+                    result_dict[sn] = (np.argmax(predicted), int(actual))  # to normalize n
+                self.io.save_pkl(result_dict, 'test_result.pkl')
+                np.save('test_result.npy', result_dict)
 
     @staticmethod
     def get_parser(add_help=False):
