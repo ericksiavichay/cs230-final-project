@@ -138,7 +138,7 @@ class REC_Processor(Processor):
 
         accuracies = []
         if evaluation:
-            accuracies.append(r2_score(label, output))
+            accuracies.append(r2_score(label_frag, result_frag))
             # self.label = np.concatenate(label_frag)
             # self.epoch_info['mean_loss'] = np.mean(loss_value)
             # self.show_epoch_info()
