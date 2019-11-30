@@ -1,5 +1,5 @@
 work_dir: ./work_dir/recognition/hcp_1200/ST_GCN
-use_gpu: True
+use_gpu: False
 eval_interval: 1
 
 # feeder
