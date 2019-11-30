@@ -135,7 +135,7 @@ class Processor(IO):
                     # begin saving the training accuracy for each
                     self.io.print_log('Eval epoch: {}'.format(epoch))
                     training_acc = self.test()
-                    print('r2 score accuracy: ' + training_acc)
+                    print('r2 score accuracy: ' + str(training_acc))
                     writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc)
                     self.io.print_log('Done.')
 
