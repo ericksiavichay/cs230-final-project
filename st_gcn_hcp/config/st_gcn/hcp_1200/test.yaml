@@ -1,16 +1,16 @@
-weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch90_model.pt
+weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch1_model.pt
 
 # feeder
 feeder: feeder.feeder.Feeder
 test_feeder_args:
-  data_path: ../aws/ba_test_data.npy
-  label_path: ../aws/ba_test_label.pkl
+  data_path: ../aws/test_data.npy
+  label_path: ../aws/test_label.pkl
 
 # model
 model: net.st_gcn.Model
 model_args:
   in_channels: 1
-  num_class: 2
+  num_class: 16
   edge_importance_weighting: True
   graph_args:
     layout: 'openpose'
@@ -19,4 +19,4 @@ model_args:
 # test
 phase: test
 device: 0
-test_batch_size: 16
+test_batch_size: 64

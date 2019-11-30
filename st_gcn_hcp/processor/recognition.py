@@ -41,7 +41,7 @@ class REC_Processor(Processor):
         self.model = self.io.load_model(self.arg.model,
                                         **(self.arg.model_args))
         self.model.apply(weights_init)
-        self.loss = nn.CrossEntropyLoss() #nn.MSELoss() #nn.CrossEntropyLoss() #nn.BCELoss() #nn.BCEWithLogitsLoss() #nn.CrossEntropyLoss()
+        self.loss = nn.MSELoss() #nn.CrossEntropyLoss() #nn.CrossEntropyLoss() #nn.BCELoss() #nn.BCEWithLogitsLoss() #nn.CrossEntropyLoss()
         
     def load_optimizer(self):
         if self.arg.optimizer == 'SGD':
@@ -87,7 +87,7 @@ class REC_Processor(Processor):
         for data, label in loader:
             # get data
             data = data.float().to(self.dev)
-            label = label.long().to(self.dev)
+            label = torch.tensor([[n] for n in label.float().to(self.dev)])
 
             # forward
             output = self.model(data)
@@ -120,7 +120,7 @@ class REC_Processor(Processor):
             
             # get data
             data = data.float().to(self.dev)
-            label = label.long().to(self.dev)
+            label = torch.tensor([[n] for n in label.float().to(self.dev)])
 
             # inference
             with torch.no_grad():

@@ -13,7 +13,7 @@ BRAIN_REGION = 22
 
 print('create X and Y dataset')
 X, Y, sample_names = [], [], []
-label_dict_train, label_dict_test = {}, {}
+label_dict_train, label_dict_dev, label_dict_test = {}, {}, {}
 
 df = pd.read_csv('data/HCP_1200.csv')
 
@@ -34,7 +34,7 @@ for file in glob.glob('data/*.npy'):
 				
 
 print('split data')
-X_train, X_test, Y_train, Y_test, train_samples, test_samples = train_test_split(X, Y, sample_names, test_size=0.2, random_state=0)
+X_train, X_test, Y_train, Y_test, train_samples, test_samples = train_test_split(X, Y, sample_names, test_size=0.3, random_state=0)
 
 print('perform data augmentation')
 def segment(X, Y, sample_name):
@@ -57,21 +57,33 @@ def segment(X, Y, sample_name):
 
 	return newX, newY, new_sn
 
+half = int(len(Y_test)/2) 
 X_train, Y_train, train_samples = segment(X_train, Y_train, train_samples)
-X_test, Y_test, test_samples = segment(X_test, Y_test, test_samples)
+X_dev, Y_dev, dev_samples = segment(X_test[:half], Y_test[:half], test_samples[:half])
+X_test, Y_test, test_samples = segment(X_test[half:], Y_test[half:], test_samples[half:])
+
 
 label_dict_train['label'] = Y_train
 label_dict_train['sample_name'] = train_samples
+label_dict_dev['label'] = Y_dev
+label_dict_dev['sample_name'] = dev_samples
 label_dict_test['label'] = Y_test
 label_dict_test['sample_name'] = test_samples
 
 
 print('save dataset')
 np.save('train_data.npy', X_train)
+np.save('dev_data.npy', X_dev)
 np.save('test_data.npy', X_test)
+
 pickle_out = open("train_label.pkl","wb")
 pk.dump(label_dict_train, pickle_out)
 pickle_out.close()
+
+pickle_out = open("dev_label.pkl","wb")
+pk.dump(label_dict_dev, pickle_out)
+pickle_out.close()
+
 pickle_out = open("test_label.pkl","wb")
 pk.dump(label_dict_test, pickle_out)
 pickle_out.close()
