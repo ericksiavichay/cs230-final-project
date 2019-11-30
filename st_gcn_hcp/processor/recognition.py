@@ -87,7 +87,7 @@ class REC_Processor(Processor):
         for data, label in loader:
             # get data
             data = data.float().to(self.dev)
-            label = torch.tensor([[n] for n in label.float().to(self.dev)])
+            label = torch.tensor([[n] for n in label.float()]).to(self.dev)
 
             # forward
             output = self.model(data)
@@ -120,7 +120,7 @@ class REC_Processor(Processor):
             
             # get data
             data = data.float().to(self.dev)
-            label = torch.tensor([[n] for n in label.float().to(self.dev)])
+            label = torch.tensor([[n] for n in label.float()]).to(self.dev)
 
             # inference
             with torch.no_grad():

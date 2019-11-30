@@ -157,8 +157,6 @@ class Processor(IO):
                                                  self.data_loader['test'].dataset.label):
                     result_dict[sn] = (np.argmax(predicted), int(actual))  # to normalize n
 
-                print(result_dict)
-
                 self.io.save_pkl(result_dict, 'test_result.pkl')
                 np.save('test_result.npy', result_dict)
 
