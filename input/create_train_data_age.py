@@ -1,4 +1,4 @@
-import numpy as np, glob
+import numpy as np, glob, random 
 import pandas as pd, pickle as pk
 from sklearn.model_selection import train_test_split
 
@@ -50,14 +50,19 @@ def segment(X, Y, sample_name):
 				new_sn.append(sn)
 
 	newX = np.array(newX)
+	cap = list(zip(newX, newY, new_sn))
+	random.shuffle(cap)
+
+	newX, newY, new_sn = zip(*cap)
+
 	return newX, newY, new_sn
 
 X_train, Y_train, train_samples = segment(X_train, Y_train, train_samples)
 X_test, Y_test, test_samples = segment(X_test, Y_test, test_samples)
 
-label_dict_train['label'] = [Y_train]
+label_dict_train['label'] = Y_train
 label_dict_train['sample_name'] = train_samples
-label_dict_test['label'] = [Y_test]
+label_dict_test['label'] = Y_test
 label_dict_test['sample_name'] = test_samples
 
 
