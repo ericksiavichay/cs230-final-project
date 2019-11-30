@@ -4,6 +4,7 @@ import sys
 import argparse
 import yaml
 import numpy as np
+from sklearn.metrics import r2_score
 
 # torch
 import torch
@@ -137,14 +138,14 @@ class REC_Processor(Processor):
 
         accuracies = []
         if evaluation:
-            self.label = np.concatenate(label_frag)
-            self.epoch_info['mean_loss'] = np.mean(loss_value)
-            self.show_epoch_info()
-
-            # show top-k accuracy
-            for k in self.arg.show_topk:
-                accuracies.append(self.show_topk(k))
-
+            accuracies.append(r2_score(label, output))
+            # self.label = np.concatenate(label_frag)
+            # self.epoch_info['mean_loss'] = np.mean(loss_value)
+            # self.show_epoch_info()
+            #
+            # # show top-k accuracy
+            # for k in self.arg.show_topk:
+            #     accuracies.append(self.show_topk(k))
         return accuracies
 
     @staticmethod

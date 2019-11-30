@@ -4,6 +4,7 @@ import sys
 import argparse, csv, random
 import yaml
 import numpy as np, pickle as pk
+from sklearn.metrics import r2_score
 
 # torch
 import torch
@@ -133,8 +134,9 @@ class Processor(IO):
 
                     # begin saving the training accuracy for each
                     self.io.print_log('Eval epoch: {}'.format(epoch))
-                    training_acc_by_k = self.test()  # list of accuracies for each k for this epoch
-                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc_by_k)
+                    training_acc = self.test()
+                    print('r2 score accuracy: ' + training_acc)
+                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc)
                     self.io.print_log('Done.')
 
         # test phase
@@ -156,6 +158,11 @@ class Processor(IO):
                 for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
                                                  self.data_loader['test'].dataset.label):
                     result_dict[sn] = (np.argmax(predicted), int(actual))  # to normalize n
+
+                print(result_dict)
+
+                result_dict['R2'] = r2_score(self.data_loader['test'].dataset.label, self.result)
+                print(result_dict['R2'])
 
                 self.io.save_pkl(result_dict, 'test_result.pkl')
                 np.save('test_result.npy', result_dict)
