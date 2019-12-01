@@ -138,11 +138,12 @@ class REC_Processor(Processor):
 
         accuracies = []
         if evaluation:
-            accuracies.append(r2_score(self.data_loader['test'].dataset.label, self.result))
-            # self.label = np.concatenate(label_frag)
-            # self.epoch_info['mean_loss'] = np.mean(loss_value)
-            # self.show_epoch_info()
-            #
+            self.label = np.concatenate(label_frag)
+            self.epoch_info['mean_loss'] = np.mean(loss_value)
+            self.show_epoch_info()
+
+            accuracies.append(r2_score(self.label, self.result))
+
             # # show top-k accuracy
             # for k in self.arg.show_topk:
             #     accuracies.append(self.show_topk(k))
