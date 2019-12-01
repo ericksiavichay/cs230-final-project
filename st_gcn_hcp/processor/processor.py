@@ -147,7 +147,9 @@ class Processor(IO):
 
             # evaluation
             self.io.print_log('Evaluation Start:')
-            self.test()
+            accuracy = self.test()
+            accuracy = np.array(accuracy)
+            np.savetxt('test_accur.txt', accuracy, delimiter=',')
             self.io.print_log('Done.\n')
 
             # save the output of model
