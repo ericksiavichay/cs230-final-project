@@ -136,13 +136,14 @@ class REC_Processor(Processor):
 
         self.result = np.concatenate(result_frag)
 
-        accuracies = [r2_score(self.label, self.result)]
-        self.io.print_log('\tR2 score: {:.2f}%'.format(accuracies[0]))
-
+        accuracies = []
         if evaluation:
             self.label = np.concatenate(label_frag)
             self.epoch_info['mean_loss'] = np.mean(loss_value)
             self.show_epoch_info()
+
+            accuracies.append(r2_score(self.label, self.result))
+            self.io.print_log('\tR2 score: {:.2f}%'.format(accuracies[0]))
 
             # show top-k accuracy
             for k in self.arg.show_topk:
