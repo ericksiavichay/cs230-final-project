@@ -20,9 +20,6 @@ model_args:
   in_channels: 1
   num_class: 16
   edge_importance_weighting: True
-  graph_args:
-    layout: 'openpose'
-    strategy: 'spatial'
 
 # training
 device: [0]

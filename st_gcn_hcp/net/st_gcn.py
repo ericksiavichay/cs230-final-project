@@ -29,14 +29,10 @@ class Model(nn.Module):
             :math:`M_{in}` is the number of instance in a frame.
     """
 
-    def __init__(self, in_channels, num_class, graph_args,
-                 edge_importance_weighting, **kwargs):
+    def __init__(self, in_channels, num_class, edge_importance_weighting, **kwargs):
         super().__init__()
 
-        # load graph
-        self.graph = Graph(**graph_args)
         A = np.load('../adj/adj_hat.npy')
-        # A = A[0]
         Dl = np.sum(A, 0)
         num_node = A.shape[0]
         Dn = np.zeros((num_node, num_node))
