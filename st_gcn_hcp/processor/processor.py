@@ -126,17 +126,16 @@ class Processor(IO):
                     self.train()
                     self.io.print_log('Done.')
 
-                    # save model
-                    if ((epoch + 1) % self.arg.save_interval == 0) or (
-                            epoch + 1 == self.arg.num_epoch):
-                        filename = 'epoch{}_model.pt'.format(epoch + 1)
-                        self.io.save_model(self.model, filename)
-
                     # begin saving the training accuracy for each
                     self.io.print_log('Eval epoch: {}'.format(epoch))
                     training_acc = self.test()
-                    print('r2 score accuracy: ' + str(training_acc))
+                    print('r2 score of: ' + str(training_acc))
                     writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc)
+
+                    # save model
+                    if training_acc[1] > 0.62:
+                        filename = 'epoch{}_model.pt'.format(epoch + 1)
+                        self.io.save_model(self.model, filename)
                     self.io.print_log('Done.')
 
         # test phase
@@ -157,15 +156,26 @@ class Processor(IO):
                 result_dict = {}
                 for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
                                                  self.data_loader['test'].dataset.label):
-                    result_dict[sn] = (np.argmax(predicted), int(actual))  # to normalize n
+                    if sn in result_dict:
+                        result_dict[sn] += [predicted[0]]
+                    else:
+                        result_dict[sn] = [int(actual), predicted[0]]  # to normalize n
 
-                print(result_dict)
+                result = {}
+                label, result = [], []
+                for key in result_dict:
+                    predicted = result_dict[key][1:]
+                    pred = max(set(predicted), key=predicted.count)
+                    label.append(result_dict[key][0])
+                    result.append(pred)
+                    result[key] = (label[-1], pred[-1])
 
-                result_dict['R2'] = r2_score(self.data_loader['test'].dataset.label, self.result)
-                print(result_dict['R2'])
+                r2 = r2_score(label, result)
+                self.io.print_log('\t R2 score of: ' + str(r2))
+                result['R2'] = r2
 
-                self.io.save_pkl(result_dict, 'test_result.pkl')
-                np.save('test_result.npy', result_dict)
+                self.io.save_pkl(result, 'test_result.pkl')
+                np.save('test_result.npy', result)
 
     @staticmethod
     def get_parser(add_help=False):

@@ -11,8 +11,8 @@ train_feeder_args:
   data_path: ../aws/train_data.npy
   label_path: ../aws/train_label.pkl
 test_feeder_args:
-  data_path: ../aws/dev_data.npy
-  label_path: ../aws/dev_label.pkl
+  data_path: ../aws/test_data.npy
+  label_path: ../aws/test_label.pkl
 
 # model
 model: net.st_gcn.Model

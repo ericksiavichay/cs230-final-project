@@ -35,7 +35,7 @@ def weights_init(m):
 
 class REC_Processor(Processor):
     """
-        Processor for Skeleton-based Action Recgnition
+        Processor for Skeleton-based Action Recognition
     """
 
     def load_model(self):
@@ -113,12 +113,12 @@ class REC_Processor(Processor):
     def test(self, evaluation=True):
         self.model.eval()
         loader = self.data_loader['test']
+
         loss_value = []
         result_frag = []
         label_frag = []
 
         for data, label in loader:
-            
             # get data
             data = data.float().to(self.dev)
             label = torch.tensor([[n] for n in label.float()]).to(self.dev)
@@ -139,14 +139,41 @@ class REC_Processor(Processor):
         accuracies = []
         if evaluation:
             self.label = np.concatenate(label_frag)
+
+            sample = loader.dataset.sample
+            print(len(sample))
+            print(len(self.result))
+            print(len(self.label))
+
+            result_dict = {}
+            for sn, predicted, actual in zip(sample, self.result, self.label):
+                if sn in result_dict:
+                    result_dict[sn] += [predicted[0]]
+                else:
+                    result_dict[sn] = [int(actual), predicted[0]]  # to normalize n
+
+            result = {}
+            label, result = [], []
+            for key in result_dict:
+                predicted = result_dict[key][1:]
+                pred = max(set(predicted), key=predicted.count)
+                label.append(result_dict[key][0])
+                result.append(pred)
+                result[key] = (label[-1], pred[-1])
+
+            r2 = r2_score(label, result)
+            print('\t R2 score of: ' + str(r2))
+            print(result)
+            result['R2'] = r2
+
             self.epoch_info['mean_loss'] = np.mean(loss_value)
             self.show_epoch_info()
 
-            accuracies.append(r2_score(self.label, self.result))
+            accuracies.append(r2)
 
-            # # show top-k accuracy
-            # for k in self.arg.show_topk:
-            #     accuracies.append(self.show_topk(k))
+            # show top-k accuracy
+            for k in self.arg.show_topk:
+                accuracies.append(self.show_topk(k))
         return accuracies
 
     @staticmethod
