@@ -1,7 +1,12 @@
 # cs230-final-project
 CS 230 Final project. Owned by Soham Gadgil, Sun Woo Kang, and Erick Siavichay-Velasco
 
-Submodule ST-GCN from : https://github.com/yysijie/st-gcn 
+# Branches
+The development branch has code for sex classification. The age_clf branch has code for binary age classification using cross entropy loss. The age_clf2 branch has code for age regression using MSELoss. 
+
+The master branch has code for getting the results of the analysis in a jupyter notebook analysis.ipynb.
+
+For running the model, please refer to the instructions in the submodule ST-GCN from : https://github.com/yysijie/st-gcn 
 > **Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition**, Sijie Yan, Yuanjun Xiong and Dahua Lin, AAAI 2018. [[Arxiv Preprint]](https://arxiv.org/abs/1801.07455)
 
 Full references
