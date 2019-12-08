@@ -1,5 +1,5 @@
 # cs230-final-project
-CS 230 Final project. Owned by Soham Gadgil, Sun Woo Kang, and Erick Siavichay-Velasco
+CS 230 Final project for Predicting Biological Age and Sex using SpatialTemporal Graph CNN for functional MRI data. Owned by Soham Gadgil, Sun Woo Kang, and Erick Siavichay-Velasco
 
 # Branches
 The development branch has code for sex classification. The age_clf branch has code for binary age classification using cross entropy loss. The age_clf2 branch has code for age regression using MSELoss. 
@@ -9,7 +9,7 @@ The master branch has code for getting the results of the analysis in a jupyter 
 For running the model, please refer to the instructions in the submodule ST-GCN from : https://github.com/yysijie/st-gcn 
 > **Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition**, Sijie Yan, Yuanjun Xiong and Dahua Lin, AAAI 2018. [[Arxiv Preprint]](https://arxiv.org/abs/1801.07455)
 
-Full references
+# References
 [1]G. H. Glover, “Overview of functional magnetic resonance imaging,”Neurosurgery clinics ofNorth America, vol. 22, no. 2, pp. 133–vii, Apr 2011, 21435566[pmid]. [Online]. Available:https://www.ncbi.nlm.nih.gov/pubmed/21435566
 
 [2]H.  M.  Aycheh,  J.-K.  Seong,  J.-H.  Shin,  D.  L.  Na,  B.  Kang,  S.  W.  Seo,  and  K.-A.Sohn, “Biological brain age prediction using cortical thickness data:  A large scale cohortstudy,”Frontiers  in  Aging  Neuroscience,   vol.  10,   p.  252,   2018.  [Online].  Available:https://www.frontiersin.org/article/10.3389/fnagi.2018.00252
