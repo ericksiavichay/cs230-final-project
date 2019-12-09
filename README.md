@@ -1,8 +1,8 @@
-# cs230-final-project
+# CS 230 Final Project
 CS 230 Final project for Predicting Biological Age and Sex using SpatialTemporal Graph CNN for functional MRI data. Owned by Soham Gadgil, Sun Woo Kang, and Erick Siavichay-Velasco
 
 # Branches
-The development branch has code for sex classification. The age_clf branch has code for binary age classification using cross entropy loss. The age_clf2 branch has code for age regression using MSELoss. 
+The sex_clf branch has code for sex classification. The age_clf branch has code for binary age classification using cross entropy loss. The age_clf2 branch has code for age regression using MSELoss. 
 
 The master branch has code for getting the results of the analysis in a jupyter notebook analysis.ipynb.
 
