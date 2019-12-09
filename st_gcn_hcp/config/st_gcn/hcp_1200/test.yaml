@@ -1,16 +1,16 @@
-weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch1_100_age_model.pt
+weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch100_model.pt
 
 # feeder
 feeder: feeder.feeder.Feeder
 test_feeder_args:
-  data_path: ../test_data_age.npy
-  label_path: ../test_label.pkl
+  data_path: ../data/test_data_no_aug.npy
+  label_path: ../data/test_label_no_aug.pkl
 
 # model
 model: net.st_gcn.Model
 model_args:
   in_channels: 1
-  num_class: 16
+  num_class: 2
   edge_importance_weighting: True
   graph_args:
     layout: 'openpose'

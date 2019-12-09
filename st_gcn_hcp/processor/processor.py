@@ -18,8 +18,6 @@ from torchlight import import_class
 
 from .io import IO
 
-from pdb import set_trace
-
 
 class Processor(IO):
     """
@@ -90,15 +88,15 @@ class Processor(IO):
                 self.io.log('train', self.meta_info['iter'], self.iter_info)
 
     def train(self):
-        for _ in range(0):
+        for _ in range(100):
             self.iter_info['loss'] = 0
             self.show_iter_info()
             self.meta_info['iter'] += 1
-        self.epoch_info['mean loss'] = 1
+        self.epoch_info['mean loss'] = 0
         self.show_epoch_info()
 
     def test(self):
-        for _ in range(0):
+        for _ in range(100):
             self.iter_info['loss'] = 1
             self.show_iter_info()
         self.epoch_info['mean loss'] = 1
@@ -127,28 +125,22 @@ class Processor(IO):
                     self.train()
                     self.io.print_log('Done.')
 
-
                     # save model
                     if ((epoch + 1) % self.arg.save_interval == 0) or (
                             epoch + 1 == self.arg.num_epoch):
                         filename = 'epoch{}_model.pt'.format(epoch + 1)
                         self.io.save_model(self.model, filename)
 
-                    # evaluation
-                    # if ((epoch + 1) % self.arg.eval_interval == 0) or (
-                    #         epoch + 1 == self.arg.num_epoch):
-
                     # begin saving the training accuracy for each
                     self.io.print_log('Eval epoch: {}'.format(epoch))
-                    training_acc_by_k = self.test() # list of accuracies for each k for this epoch
-                    # accuracies = [epoch] + training_acc_by_k
-                    # writer.writerow(accuracies)
-                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])] + training_acc_by_k)
+                    print(self.epoch_info['mean_loss'])
+                    training_acc_by_k = self.test()  # list of accuracies for each k for this epoch
+                    print(self.epoch_info['mean_loss'])
+                    writer.writerow(['{}'.format(epoch), '{}'.format(self.epoch_info['mean_loss'])]  + training_acc_by_k)
                     self.io.print_log('Done.')
 
         # test phase
         elif self.arg.phase == 'test':
-
             # the path of weights must be appointed
             if self.arg.weights is None:
                 raise ValueError('Please appoint --weights.')
@@ -160,16 +152,14 @@ class Processor(IO):
             self.test()
             self.io.print_log('Done.\n')
 
-            print(self.data_loader['test'].dataset.label)
-
             # save the output of model
             if self.arg.save_result:
                 result_dict = {}
-                for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result, self.data_loader['test'].dataset.label):
-                    result_dict[sn] = (np.argmax(predicted), int(actual)-22) # to normalize n
+                for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
+                                                 self.data_loader['test'].dataset.label):
+                    result_dict[sn] = (np.argmax(predicted), int(actual))  # to normalize n
                 self.io.save_pkl(result_dict, 'test_result.pkl')
                 np.save('test_result.npy', result_dict)
-
 
     @staticmethod
     def get_parser(add_help=False):

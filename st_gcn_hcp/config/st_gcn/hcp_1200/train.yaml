@@ -1,5 +1,5 @@
 work_dir: ./work_dir/recognition/hcp_1200/ST_GCN
-use_gpu: False
+use_gpu: True
 eval_interval: 1
 
 # feeder
@@ -7,18 +7,18 @@ feeder: feeder.feeder.Feeder
 train_feeder_args:
   random_choose: True
   random_move: True
-  window_size: 150
-  data_path: ../train_data_age_100.npy
-  label_path: ../train_label_100.pkl
+  window_size: 25
+  data_path: ../data/train_data_sex_22.npy
+  label_path: ../data/train_label_sex_22.pkl
 test_feeder_args:
-  data_path: ../train_data_age_100.npy
-  label_path: ../train_label_100.pkl
+  data_path: ../data/test_data_sex_22.npy
+  label_path: ../data/test_label_sex_22.pkl
 
 # model
 model: net.st_gcn.Model
 model_args:
   in_channels: 1
-  num_class: 16
+  num_class: 2
   edge_importance_weighting: True
   graph_args:
     layout: 'openpose'
@@ -26,10 +26,10 @@ model_args:
 
 # training
 device: [0]
-batch_size: 16
-test_batch_size: 5
+batch_size: 64
+test_batch_size: 64
 
 #optim
 base_lr: 0.1
-step: [3,6]
-num_epoch: 2
+step: [100]
+num_epoch: 100

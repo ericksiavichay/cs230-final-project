@@ -87,7 +87,7 @@ class REC_Processor(Processor):
         loss_value = []
 
         for data, label in loader:
-            # get data
+            # get dat:wq
             data = data.float().to(self.dev)
             label = label.long().to(self.dev)
 
