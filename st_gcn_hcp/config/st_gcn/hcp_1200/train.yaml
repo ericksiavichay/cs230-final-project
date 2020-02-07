@@ -7,12 +7,12 @@ feeder: feeder.feeder.Feeder
 train_feeder_args:
   random_choose: True
   random_move: True
-  window_size: 25
-  data_path: ../data/train_data_sex_22.npy
-  label_path: ../data/train_label_sex_22.pkl
+  window_size: 30
+  data_path: ../data/train_data_22_sex_100.npy
+  label_path: ../data/train_label_22_sex_100.pkl
 test_feeder_args:
-  data_path: ../data/test_data_sex_22.npy
-  label_path: ../data/test_label_sex_22.pkl
+  data_path: ../data/test_data_22_sex_100.npy
+  label_path: ../data/test_label_22_sex_100.pkl
 
 # model
 model: net.st_gcn.Model
@@ -30,6 +30,6 @@ batch_size: 64
 test_batch_size: 64
 
 #optim
-base_lr: 0.1
-step: [100]
+base_lr: 0.001
+step: [99]
 num_epoch: 100

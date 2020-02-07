@@ -77,7 +77,7 @@ class Processor(IO):
         if self.meta_info['iter'] % self.arg.log_interval == 0:
             info ='\tIter {} Done.'.format(self.meta_info['iter'])
             for k, v in self.iter_info.items():
-                if isinstance(v, float):
+                if isinstance(v,float):
                     info = info + ' | {}: {:.4f}'.format(k, v)
                 else:
                     info = info + ' | {}: {}'.format(k, v)
@@ -157,7 +157,8 @@ class Processor(IO):
                 result_dict = {}
                 for sn, predicted, actual in zip(self.data_loader['test'].dataset.sample, self.result,
                                                  self.data_loader['test'].dataset.label):
-                    result_dict[sn] = (np.argmax(predicted), int(actual))  # to normalize n
+                    #if sn not in resul_dict.keys():
+                    result_dict[sn] = [np.argmax(predicted), int(actual)]  # to normalize n
                 self.io.save_pkl(result_dict, 'test_result.pkl')
                 np.save('test_result.npy', result_dict)
 
@@ -181,7 +182,7 @@ class Processor(IO):
 
         # visulize and debug
         parser.add_argument('--log_interval', type=int, default=1, help='the interval for printing messages (#iteration)')
-        parser.add_argument('--save_interval', type=int, default=10, help='the interval for storing models (#iteration)')
+        parser.add_argument('--save_interval', type=int, default=1, help='the interval for storing models (#iteration)')
         parser.add_argument('--eval_interval', type=int, default=5, help='the interval for evaluating models (#iteration)')
         parser.add_argument('--save_log', type=str2bool, default=True, help='save logging or not')
         parser.add_argument('--print_log', type=str2bool, default=True, help='print logging or not')

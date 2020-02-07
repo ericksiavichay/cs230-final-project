@@ -1,10 +1,10 @@
-weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch100_model.pt
+weights: ./work_dir/recognition/hcp_1200/ST_GCN/epoch50_model.pt
 
 # feeder
 feeder: feeder.feeder.Feeder
 test_feeder_args:
-  data_path: ../data/test_data_no_aug.npy
-  label_path: ../data/test_label_no_aug.pkl
+  data_path: ../data/test_data_22_sex.npy
+  label_path: ../data/test_label_22_sex.pkl
 
 # model
 model: net.st_gcn.Model

@@ -36,7 +36,7 @@ class Model(nn.Module):
         # load graph
         self.graph = Graph(**graph_args)
         A = np.load('../adj/adj_matrix.npy')
-        A = A[0]
+        #A = A[0]
         Dl = np.sum(A, 0)
         num_node = A.shape[0]
         Dn = np.zeros((num_node, num_node))
@@ -161,10 +161,10 @@ class st_gcn(nn.Module):
                  out_channels,
                  kernel_size,
                  stride=1,
-                 dropout=0,
+                 dropout=0.5,
                  residual=True):
         super().__init__()
-
+        print("Dropout={}".format(dropout))
         assert len(kernel_size) == 2
         assert kernel_size[0] % 2 == 1
         padding = ((kernel_size[0] - 1) // 2, 0)

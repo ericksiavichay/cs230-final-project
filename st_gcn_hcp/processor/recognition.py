@@ -74,9 +74,47 @@ class REC_Processor(Processor):
     # validity of accuracy
     def show_topk(self, k):
         # set_trace()
+        
         rank = self.result.argsort()
-        hit_top_k = [l in rank[i, -k:] for i, l in enumerate(self.label)]
-        accuracy = sum(hit_top_k) * 1.0 / len(hit_top_k)
+       
+        #print(self.sample)
+        result_dict = {}
+        #print(len(self.label))
+        #print(len(self.sample))
+        #zero_logit_sum = 0
+        #one_logit_sum = 0
+        for i, l in enumerate(self.label):
+            if self.sample[i] not in result_dict.keys():
+                result_dict[self.sample[i]] = (list(rank[i, -1:]), l)
+                #print(rank[i, -1:])
+                #zero_logit_sum = self.result[i][0]
+                #one_logit_sum = self.result[i][1]
+                #result_dict[self.sample[i]] = (zero_logit_sum, one_logit_sum, l)
+            else:
+                #zero_logit_sum = result_dict[self.sample[i]][0] + self.result[i][0]
+                #one_logit_sum = result_dict[self.sample[i]][1] + self.result[i][1]
+                result_dict[self.sample[i]][0].append(list(rank[i, -1:])[0])
+                #result_dict[self.sample[i]] = (zero_logit_sum, one_logit_sum, l)
+        hit_top_k = []
+        print(result_dict)
+        for v in result_dict.values():
+            predicted_val_list = v[0]
+            actual_label = v[1]
+            predicted_label = max(set(predicted_val_list), key=predicted_val_list.count)
+            #if v[0] > v[1]:
+            #    predicted_label = 0
+            #else:
+            #    predicted_label = 1
+            #actual_label = v[2]
+            if predicted_label == actual_label:
+                hit_top_k.append(1)
+            else:
+                hit_top_k.append(0)
+                #print('Logit 0 {}, Logit 1 {}, Actual Label{}'.format(v[0], v[1], actual_label))
+        #print(len(hit_top_k))
+        #hit_top_k = [l in rank[i, -k:] for i, l in enumerate(self.label)]
+        
+        accuracy = (sum(hit_top_k) * 1.0) / len(hit_top_k)
         self.io.print_log('\tTop{}: {:.2f}%'.format(k, 100 * accuracy))
         return accuracy
 
@@ -140,6 +178,7 @@ class REC_Processor(Processor):
         self.result = np.concatenate(result_frag)
         if evaluation:
             self.label = np.concatenate(label_frag)
+            self.sample = loader.dataset.sample
             self.epoch_info['mean_loss']= np.mean(loss_value)
             self.show_epoch_info
 
@@ -165,7 +204,7 @@ class REC_Processor(Processor):
         # optim
         parser.add_argument('--base_lr', type=float, default=0.01, help='initial learning rate')
         parser.add_argument('--step', type=int, default=[], nargs='+', help='the epoch where optimizer reduce the learning rate')
-        parser.add_argument('--optimizer', default='SGD', help='type of optimizer')
+        parser.add_argument('--optimizer', default='Adam', help='type of optimizer')
         parser.add_argument('--nesterov', type=str2bool, default=True, help='use nesterov or not')
         parser.add_argument('--weight_decay', type=float, default=0.0001, help='weight decay for optimizer')
         # endregion yapf: enable
